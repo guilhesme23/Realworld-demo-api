@@ -1,15 +1,13 @@
 package config
 
+import "example/realworld-api/src/schemas"
+
 type Constants struct {
 	PORT string `default:"8000"`
 }
 
-type User struct {
-	Username string `json:"username"`
-}
-
 type database struct {
-	Users []User
+	Users []schemas.User
 }
 
 type Config struct {
@@ -21,7 +19,7 @@ func New() (*Config, error) {
 	config := Config{}
 
 	config.DB = &database{
-		Users: make([]User, 0),
+		Users: make([]schemas.User, 0),
 	}
 
 	config.Constants = Constants{"8000"}
