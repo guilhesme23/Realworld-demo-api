@@ -1,7 +1,12 @@
 package schemas
 
+import "gorm.io/gorm"
+
 type User struct {
-	Username string `json:"username" unique:"true"`
-	Email    string `json:"email" unique:"true"`
-	Password string `json:"password"`
+	gorm.Model
+	Username string  `json:"username"`
+	Email    string  `json:"email"`
+	Password string  `json:"password"`
+	Bio      *string `json:"bio"`
+	Image    *string `json:"image"`
 }
