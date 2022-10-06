@@ -1,28 +1,44 @@
 package config
 
-import "example/realworld-api/src/schemas"
+import (
+	"errors"
+	"fmt"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
 
 type Constants struct {
-	PORT string `default:"8000"`
-}
-
-type database struct {
-	Users []schemas.User
+	PORT                                        string `default:"8000"`
+	DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME string
 }
 
 type Config struct {
 	Constants
-	DB *database
+	DB *gorm.DB
 }
 
 func New() (*Config, error) {
 	config := Config{}
 
-	config.DB = &database{
-		Users: make([]schemas.User, 0),
+	config.Constants = Constants{
+		PORT:    "8000",
+		DB_HOST: "localhost",
+		DB_PORT: "5432",
+		DB_USER: "admin",
+		DB_PASS: "admin",
+		DB_NAME: "conduit",
 	}
 
-	config.Constants = Constants{"8000"}
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=America/Sao_Paulo", config.DB_HOST, config.DB_USER, config.DB_PASS, config.DB_NAME, config.DB_PORT)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		return nil, errors.New("could not access database")
+	}
+
+	config.DB = db
 
 	return &config, nil
 }

@@ -3,14 +3,16 @@ package main
 import (
 	"example/realworld-api/src/controllers"
 	config "example/realworld-api/src/internal"
-	"example/realworld-api/src/schemas"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	cfg, _ := config.New()
-	populateDb(cfg)
+	cfg, err := config.New()
+	if err != nil {
+		panic(err.Error())
+	}
+	// populateDb(cfg)
 
 	router := gin.Default()
 
@@ -20,8 +22,8 @@ func main() {
 	router.Run("0.0.0.0:" + cfg.PORT)
 }
 
-func populateDb(cfg *config.Config) {
-	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user1"})
-	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user2"})
-	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user3"})
-}
+// func populateDb(cfg *config.Config) {
+// 	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user1"})
+// 	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user2"})
+// 	cfg.DB.Users = append(cfg.DB.Users, schemas.User{Username: "user3"})
+// }
